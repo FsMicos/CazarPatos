@@ -69,42 +69,54 @@ class LoginActivity : AppCompatActivity() {
         }
         */
     }
-    private fun LeerDatosDePreferencias(){
+    private fun LeerDatosDePreferencias() {
+        var datoLeido: Pair<String, String>
+
         // Usando SharedPreferencesManager normal
         manejadorArchivo = SharedPreferencesManager(this)
-        val listadoLeido = manejadorArchivo.ReadInformation()
-        Log.d("TAG", "SharedPreferencesManager " + listadoLeido.toList().toString())
+        datoLeido = manejadorArchivo.ReadInformation()
+        Log.d("TAG", "SharedPreferencesManager " + datoLeido.toList().toString())
 
         // Usando EncryptedSharedPreferencesManager para datos sensibles
         manejadorArchivo = EncriptedSharedPreferencesManager(this)
-        val datosEncriptados = manejadorArchivo.ReadInformation()
-        Log.d("TAG", "EncryptedSharedPreferencesManager " + datosEncriptados.toList().toString())
+        datoLeido = manejadorArchivo.ReadInformation()
+        Log.d("TAG", "EncryptedSharedPreferencesManager " + datoLeido.toList().toString())
 
-        // Aplicar los datos leídos a la UI (usando los datos encriptados)
-        if(datosEncriptados.first.isNotEmpty()) {
+        // Usando FileInternalManager para archivos internos
+        manejadorArchivo = FileInternalManager(this)
+        datoLeido = manejadorArchivo.ReadInformation()
+        Log.d("TAG", "FileInternalManager " + datoLeido.toList().toString())
+
+        // Aplicar los datos leídos a la UI (puedes elegir cuál usar como fuente principal)
+        // En este ejemplo uso FileInternalManager como fuente principal
+        if (datoLeido.first.isNotEmpty()) {
             checkBoxRecordarme.isChecked = true
-            editTextEmail.setText(datosEncriptados.first)
-            editTextPassword.setText(datosEncriptados.second)
+            editTextEmail.setText(datoLeido.first)
+            editTextPassword.setText(datoLeido.second)
         }
     }
 
-    private fun GuardarDatosEnPreferencias(){
+    private fun GuardarDatosEnPreferencias() {
         val email = editTextEmail.text.toString()
         val clave = editTextPassword.text.toString()
         val listadoAGrabar: Pair<String, String>
 
-        if(checkBoxRecordarme.isChecked){
+        if (checkBoxRecordarme.isChecked) {
             listadoAGrabar = email to clave
-        } else{
+        } else {
             listadoAGrabar = "" to ""
         }
 
-        // Guardar con SharedPreferencesManager normal (para comparación)
+        // Guardar con SharedPreferencesManager normal
         manejadorArchivo = SharedPreferencesManager(this)
         manejadorArchivo.SaveInformation(listadoAGrabar)
 
         // Guardar con EncryptedSharedPreferencesManager (datos sensibles)
         manejadorArchivo = EncriptedSharedPreferencesManager(this)
+        manejadorArchivo.SaveInformation(listadoAGrabar)
+
+        // Guardar con FileInternalManager (archivos internos)
+        manejadorArchivo = FileInternalManager(this)
         manejadorArchivo.SaveInformation(listadoAGrabar)
     }
 
