@@ -12,18 +12,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CazarPatos.Personalizado"
         tools:targetApi="31">
+
+        <!-- Actividad de ranking - Primera pantalla que se abre (para testing) -->
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
+            android:name=".RankingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Actividad principal -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- Actividad de login -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

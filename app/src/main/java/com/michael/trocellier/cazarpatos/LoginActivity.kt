@@ -1,4 +1,5 @@
 package com.michael.trocellier.cazarpatos
+import FileExternalManager
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -87,8 +88,13 @@ class LoginActivity : AppCompatActivity() {
         datoLeido = manejadorArchivo.ReadInformation()
         Log.d("TAG", "FileInternalManager " + datoLeido.toList().toString())
 
+        // Usando FileExternalManager para archivos externos
+        manejadorArchivo = FileExternalManager(this)
+        datoLeido = manejadorArchivo.ReadInformation()
+        Log.d("TAG", "FileExternalManager " + datoLeido.toList().toString())
+
         // Aplicar los datos leídos a la UI (puedes elegir cuál usar como fuente principal)
-        // En este ejemplo uso FileInternalManager como fuente principal
+        // En este ejemplo uso FileExternalManager como fuente principal
         if (datoLeido.first.isNotEmpty()) {
             checkBoxRecordarme.isChecked = true
             editTextEmail.setText(datoLeido.first)
@@ -118,8 +124,15 @@ class LoginActivity : AppCompatActivity() {
         // Guardar con FileInternalManager (archivos internos)
         manejadorArchivo = FileInternalManager(this)
         manejadorArchivo.SaveInformation(listadoAGrabar)
-    }
 
+        // Guardar con FileExternalManager (archivos externos)
+        manejadorArchivo = FileExternalManager(this)
+        manejadorArchivo.SaveInformation(listadoAGrabar)
+    }
+    override fun onDestroy() {
+        mediaPlayer.release()
+        super.onDestroy()
+    }
     private fun validateRequiredData(): Boolean {
         val email = editTextEmail.text.toString()
         val password = editTextPassword.text.toString()
@@ -143,11 +156,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         return true
-    }
-
-    override fun onDestroy() {
-        mediaPlayer.release()
-        super.onDestroy()
     }
 
     companion object {

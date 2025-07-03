@@ -1,15 +1,12 @@
 import android.app.Activity
 import android.os.Environment
 import com.michael.trocellier.cazarpatos.FileHandler
+import com.michael.trocellier.cazarpatos.SHAREDINFO_FILENAME
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
 class FileExternalManager(val actividad: Activity) : FileHandler {
-
-    companion object {
-        const val SHAREDINFO_FILENAME = "sharedinfo.txt"
-    }
 
     fun isExternalStorageWritable(): Boolean {
         return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
